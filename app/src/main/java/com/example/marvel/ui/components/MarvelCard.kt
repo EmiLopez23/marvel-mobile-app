@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.marvel.models.Hero
+import com.example.marvel.models.Thumbnail
 import com.example.marvel.models.initialHero
 import com.example.marvel.ui.theme.MarvelRed
 import com.example.marvel.utils.modifier.helpers.formatImageUrl
@@ -37,13 +38,13 @@ import com.example.marvel.utils.modifier.topBorder
 
 @Composable
 fun MarvelCard(
-    hero: Hero,
+    thumbnail: String,
+    name: String,
     onClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     isFavorite: Boolean = false
 ) {
 
-    val imageUrl = formatImageUrl(hero.thumbnail.path, hero.thumbnail.extension)
     Column(
         Modifier
             .aspectRatio(2f)
@@ -51,8 +52,8 @@ fun MarvelCard(
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
-            model = imageUrl,
-            contentDescription = hero.name + " thumbnail",
+            model = thumbnail,
+            contentDescription = "$name thumbnail",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,14 +73,12 @@ fun MarvelCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = hero.name,
+                    text = name,
                     fontSize = 24.sp,
                     color = Color.White,
                     textAlign = TextAlign.Left,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
-//                        .fillMaxWidth()
-//                        .align(Alignment.Start)
                 )
 
                 Icon(
@@ -103,7 +102,8 @@ fun MarvelCard(
 @Composable
 fun MarvelCardPreview() {
     MarvelCard(
-        hero = initialHero,
+        formatImageUrl(initialHero.thumbnail.path, initialHero.thumbnail.extension),
+        initialHero.name,
         onClick = {},
         onFavoriteClick = {},
     )

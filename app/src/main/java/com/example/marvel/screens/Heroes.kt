@@ -93,7 +93,8 @@ fun HeroesList(
         items(heroes.size) { index ->
             val hero = heroes[index]
             MarvelCard(
-                hero,
+                thumbnail = formatImageUrl(hero.thumbnail.path, hero.thumbnail.extension),
+                name = hero.name,
                 onClick = { onNavigateToHeroDetails(hero.id) },
                 onFavoriteClick = { onFavoriteClick(hero) },
                 isFavorite = hero.isFavorite

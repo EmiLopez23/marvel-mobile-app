@@ -11,9 +11,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.marvel.navigation.enums.Routes
 import com.example.marvel.screens.Comics
+import com.example.marvel.screens.Favorites
 import com.example.marvel.screens.HeroDetail
 import com.example.marvel.screens.Heroes
-import com.example.marvel.screens.Profile
 
 @Composable
 fun Router(innerPadding: PaddingValues, navController: NavHostController) {
@@ -35,7 +35,9 @@ fun Router(innerPadding: PaddingValues, navController: NavHostController) {
             Comics()
         }
         composable(route = Routes.Favorites.name) {
-            Profile()
+            Favorites(
+                onNavigate = { route -> navController.navigate(route) }
+            )
         }
         composable(route = "${Routes.HeroDetails.name}/{heroId}") { backStackEntry ->
             val heroId = backStackEntry.arguments?.getString("heroId") ?: ""

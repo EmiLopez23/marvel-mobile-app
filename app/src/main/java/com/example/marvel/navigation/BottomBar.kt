@@ -2,9 +2,7 @@ package com.example.marvel.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.outlined.Face
-import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
@@ -25,8 +23,8 @@ fun BottomBar(
 
     val comicsTab = TabItem(
         title = Routes.Comics.name,
-        unselectedIcon = rememberVectorPainter(Icons.Outlined.MailOutline),
-        selectedIcon = rememberVectorPainter(Icons.Filled.MailOutline)
+        unselectedIcon = painterResource(id = R.drawable.book_outlined),
+        selectedIcon = painterResource(id = R.drawable.book_filled)
     )
 
     val favoritesTab = TabItem(

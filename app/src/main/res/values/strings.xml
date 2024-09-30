@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">marvel</string>
+    <string name="favorites_title">Favorites</string>
+
     <string name="no_content_on_query_message">No matches found</string>
     <string name="error_message">Error while getting Heroes</string>
     <string name="retry_message">Check your connection and retry</string>
