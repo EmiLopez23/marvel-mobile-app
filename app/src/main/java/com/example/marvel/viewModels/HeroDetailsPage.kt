@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.marvel.api.ApiServiceImpl
 import com.example.marvel.models.Hero
+import com.example.marvel.models.initialHero
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,34 +13,30 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class HeroViewModel @Inject constructor(
+class HeroDetailViewModel @Inject constructor(
     @ApplicationContext val context: Context,
     private val service: ApiServiceImpl,
 ) : ViewModel() {
 
-
     private val _loading = MutableStateFlow(true)
-    val loadingHeroes: StateFlow<Boolean> = _loading.asStateFlow()
+    val loadingHero: StateFlow<Boolean> = _loading.asStateFlow()
 
-    private val _heroes = MutableStateFlow(listOf<Hero>())
-    val heroes: StateFlow<List<Hero>> = _heroes.asStateFlow()
+    //In case user needs to retry
+    private val _heroId = MutableStateFlow("1")
+
+    private val _hero = MutableStateFlow(initialHero)
+    val hero: StateFlow<Hero> = _hero.asStateFlow()
 
     private val _showRetry = MutableStateFlow(false)
     val showRetry: StateFlow<Boolean> = _showRetry.asStateFlow()
 
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
-
-
-    init {
-        loadHeroes()
-    }
-
-    private fun loadHeroes() {
-        service.getHeroes(
+    fun loadHeroDetails(heroId: String) {
+        _heroId.value = heroId
+        service.getHeroById(
+            heroId = heroId,
             context = context,
             onSuccess = {
-                _heroes.value = it
+                _hero.value = it
                 _showRetry.value = false
             },
             onFail = {
@@ -52,10 +49,6 @@ class HeroViewModel @Inject constructor(
     }
 
     fun retryLoadingHeroes() {
-        loadHeroes()
-    }
-
-    fun onSearchQueryChanged(query: String) {
-        _searchQuery.value = query
+        loadHeroDetails(_heroId.value)
     }
 }

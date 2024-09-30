@@ -60,4 +60,56 @@ class ApiServiceImpl @Inject constructor() {
         }
         )
     }
+
+    fun getHeroById(
+        heroId: String,
+        context: Context,
+        onSuccess: (Hero) -> Unit,
+        onFail: () -> Unit,
+        loadingFinished: () -> Unit
+    ) {
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(
+                context.getString(R.string.api_url)
+            )
+            .addConverterFactory(
+                GsonConverterFactory.create()
+            )
+            .build()
+
+        val service: ApiService = retrofit.create(ApiService::class.java)
+
+        val call: Call<ApiResponse<Hero>> = service.getHeroById(
+            heroId,
+            context.getString(R.string.api_key),
+            context.getString(R.string.hash),
+            context.getString(R.string.ts)
+        )
+
+        call.enqueue(object : Callback<ApiResponse<Hero>> {
+            override fun onResponse(response: Response<ApiResponse<Hero>>, retrofit: Retrofit?) {
+                println(heroId)
+                loadingFinished()
+                if (response.isSuccess) {
+                    val hero: Hero = response.body().data.results[0]
+                    onSuccess(hero)
+                } else {
+                    println("ERROR FETCHING DATA")
+                    println(response.errorBody().string())
+                    onFailure(Exception("Bad request"))
+                }
+            }
+
+            override fun onFailure(t: Throwable?) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.error_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                onFail()
+                loadingFinished()
+            }
+        }
+        )
+    }
 }

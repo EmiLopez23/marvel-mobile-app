@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.marvel.navigation.enums.Routes
 import com.example.marvel.screens.Comics
+import com.example.marvel.screens.HeroDetail
 import com.example.marvel.screens.Heroes
 import com.example.marvel.screens.Profile
 
@@ -26,13 +27,19 @@ fun Router(innerPadding: PaddingValues, navController: NavHostController) {
     ) {
 
         composable(route = Routes.Heroes.name) {
-            Heroes()
+            Heroes(
+                onNavigate = { route -> navController.navigate(route) }
+            )
         }
         composable(route = Routes.Comics.name) {
             Comics()
         }
         composable(route = Routes.Profile.name) {
             Profile()
+        }
+        composable(route = "${Routes.HeroDetails.name}/{heroId}") { backStackEntry ->
+            val heroId = backStackEntry.arguments?.getString("heroId") ?: ""
+            HeroDetail(heroId)
         }
     }
 }

@@ -33,3 +33,35 @@ data class Thumbnail(
     val path: String,
     val extension: String
 )
+
+val initialHero = Hero(
+    id = 0,
+    name = "Unknown Hero",
+    description = "No description available",
+    thumbnail = Thumbnail(
+        path = "",
+        extension = "jpg"
+    ),
+    resourceURI = "",
+    comics = CollectionResponse(
+        available = 0,
+        collectionURI = "",
+        items = emptyList()
+    ),
+    series = CollectionResponse(
+        available = 0,
+        collectionURI = "",
+        items = emptyList()
+    ),
+    stories = CollectionResponse(
+        available = 0,
+        collectionURI = "",
+        items = emptyList()
+    ),
+    events = CollectionResponse(
+        available = 0,
+        collectionURI = "",
+        items = emptyList()
+    ),
+    urls = emptyList()
+)

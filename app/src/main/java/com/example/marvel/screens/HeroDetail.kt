@@ -1,46 +1,75 @@
-package com.example.marvel.ui.components
+package com.example.marvel.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.marvel.models.Hero
+import com.example.marvel.ui.components.Loader
+import com.example.marvel.ui.components.Retry
 import com.example.marvel.ui.theme.MarvelRed
 import com.example.marvel.utils.modifier.helpers.formatImageUrl
 import com.example.marvel.utils.modifier.topBorder
+import com.example.marvel.viewModels.HeroDetailViewModel
 
 @Composable
-fun MarvelCard(
-    hero: Hero,
-    onClick: () -> Unit
+fun HeroDetail(
+    heroId: String,
+    viewModel: HeroDetailViewModel = hiltViewModel(),
 ) {
 
-    val imageUrl = formatImageUrl(hero.thumbnail.path, hero.thumbnail.extension)
+    val hero by viewModel.hero.collectAsState()
+    val loading by viewModel.loadingHero.collectAsState()
+    val showRetry by viewModel.showRetry.collectAsState()
+
+    LaunchedEffect(heroId) {
+        viewModel.loadHeroDetails(heroId)
+    }
+
+    when {
+        loading -> {
+            Loader()
+        }
+
+        showRetry -> {
+            Retry(onClick = { viewModel.loadHeroDetails(heroId) })
+        }
+
+        else -> {
+            HeroDetailContent(hero)
+        }
+    }
+
+
+}
+
+
+@Composable
+fun HeroDetailContent(hero: Hero) {
     Column(
         Modifier
-            .aspectRatio(2f)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
+            .fillMaxSize()
+            .background(Color.Black)
     ) {
         AsyncImage(
-            model = imageUrl,
+            model = formatImageUrl(hero.thumbnail.path, hero.thumbnail.extension),
             contentDescription = hero.name + " thumbnail",
             contentScale = ContentScale.Crop,
             modifier = Modifier

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.marvel.R
 import com.example.marvel.models.Hero
+import com.example.marvel.navigation.enums.Routes
 import com.example.marvel.ui.components.CustomSearchBar
 import com.example.marvel.ui.components.Loader
 import com.example.marvel.ui.components.MarvelCard
@@ -25,6 +26,7 @@ import com.example.marvel.viewModels.HeroViewModel
 
 @Composable
 fun Heroes(
+    onNavigate: (String) -> Unit,
     viewModel: HeroViewModel = hiltViewModel(),
 ) {
     val heroes by viewModel.heroes.collectAsState()
@@ -42,7 +44,10 @@ fun Heroes(
                 placeholder = "Search for heroes",
                 onSearch = { /* Handle search */ }
             )
-            HeroesList(heroes.filter { it.name.contains(searchQuery, true) })
+            HeroesList(
+                heroes.filter { it.name.contains(searchQuery, true) },
+                onNavigateToHeroDetails = { onNavigate("${Routes.HeroDetails.name}/$it") }
+            )
         }
     }
 
@@ -50,7 +55,7 @@ fun Heroes(
 }
 
 @Composable
-fun HeroesList(heroes: List<Hero>) {
+fun HeroesList(heroes: List<Hero>, onNavigateToHeroDetails: (Int) -> Unit) {
 
     if (heroes.isEmpty()) {
         return Column(
@@ -73,7 +78,10 @@ fun HeroesList(heroes: List<Hero>) {
     ) {
         items(heroes.size) { index ->
             val hero = heroes[index]
-            MarvelCard(hero)
+            MarvelCard(
+                hero,
+                onClick = { onNavigateToHeroDetails(hero.id) }
+            )
         }
     }
 }
