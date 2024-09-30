@@ -1,7 +1,6 @@
 package com.example.marvel.ui.theme
 
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -34,7 +33,8 @@ onSurface = Color(0xFF1C1B1F),
 
 @Composable
 fun MarvelTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    //force dark mode
+    darkTheme: Boolean = true,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
