@@ -34,7 +34,7 @@ fun Router(innerPadding: PaddingValues, navController: NavHostController) {
         composable(route = Routes.Comics.name) {
             Comics()
         }
-        composable(route = Routes.Profile.name) {
+        composable(route = Routes.Favorites.name) {
             Profile()
         }
         composable(route = "${Routes.HeroDetails.name}/{heroId}") { backStackEntry ->

@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import com.example.marvel.navigation.interfaces.TabItem
 import com.example.marvel.ui.theme.MarvelRedTransparent
 
@@ -49,12 +49,12 @@ fun TabsView(tabs: List<TabItem>, onNavigate: (String) -> Unit) {
 @Composable
 fun IconView(
     isSelected: Boolean,
-    selectedIcon: ImageVector,
-    unselectedIcon: ImageVector,
+    selectedIcon: Painter,
+    unselectedIcon: Painter,
     description: String
 ) {
     Icon(
-        imageVector = if (isSelected) selectedIcon else unselectedIcon,
+        painter = if (isSelected) selectedIcon else unselectedIcon,
         contentDescription = description
     )
 }

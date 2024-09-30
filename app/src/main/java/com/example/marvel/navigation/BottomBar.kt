@@ -1,14 +1,15 @@
 package com.example.marvel.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.marvel.R
 import com.example.marvel.navigation.enums.Routes
 import com.example.marvel.navigation.interfaces.TabItem
 
@@ -18,23 +19,23 @@ fun BottomBar(
 ) {
     val heroesTab = TabItem(
         title = Routes.Heroes.name,
-        unselectedIcon = Icons.Outlined.Face,
-        selectedIcon = Icons.Filled.Face
+        unselectedIcon = rememberVectorPainter(Icons.Outlined.Face),
+        selectedIcon = rememberVectorPainter(Icons.Filled.Face)
     )
 
     val comicsTab = TabItem(
         title = Routes.Comics.name,
-        unselectedIcon = Icons.Outlined.MailOutline,
-        selectedIcon = Icons.Filled.MailOutline
+        unselectedIcon = rememberVectorPainter(Icons.Outlined.MailOutline),
+        selectedIcon = rememberVectorPainter(Icons.Filled.MailOutline)
     )
 
-    val profileTab = TabItem(
-        title = Routes.Profile.name,
-        unselectedIcon = Icons.Outlined.AccountCircle,
-        selectedIcon = Icons.Filled.AccountCircle
+    val favoritesTab = TabItem(
+        title = Routes.Favorites.name,
+        unselectedIcon = painterResource(id = R.drawable.bookmark_outlined),
+        selectedIcon = painterResource(id = R.drawable.bookmark_filled)
     )
 
-    val tabs = listOf(heroesTab, comicsTab, profileTab)
+    val tabs = listOf(heroesTab, comicsTab, favoritesTab)
 
     TabsView(tabs = tabs, onNavigate = onNavigate)
 }
