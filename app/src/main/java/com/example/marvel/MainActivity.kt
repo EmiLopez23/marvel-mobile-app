@@ -10,7 +10,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.marvel.navigation.BottomBar
 import com.example.marvel.navigation.Router
 import com.example.marvel.ui.theme.MarvelTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

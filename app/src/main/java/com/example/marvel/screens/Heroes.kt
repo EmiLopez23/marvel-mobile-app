@@ -3,73 +3,77 @@ package com.example.marvel.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.marvel.R
+import com.example.marvel.models.Hero
 import com.example.marvel.ui.components.CustomSearchBar
+import com.example.marvel.ui.components.Loader
 import com.example.marvel.ui.components.MarvelCard
+import com.example.marvel.ui.components.Retry
+import com.example.marvel.viewModels.HeroViewModel
 
 @Composable
-fun Heroes() {
-    var query by remember { mutableStateOf("") }
+fun Heroes(
+    viewModel: HeroViewModel = hiltViewModel(),
+) {
+    val heroes by viewModel.heroes.collectAsState()
+    val loading by viewModel.loadingHeroes.collectAsState()
+    val showRetry by viewModel.showRetry.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
 
-    val marvelCards = listOf(
-        "Wolverine" to "https://example.com/wolverine.jpg",
-        "Spider-Man" to "https://example.com/spiderman.jpg",
-        "Iron Man" to "https://example.com/ironman.jpg",
-        "Thor" to "https://example.com/thor.jpg",
-        "Captain America" to "https://example.com/captainamerica.jpg",
-        "Hulk" to "https://example.com/hulk.jpg",
-        "Black Widow" to "https://example.com/blackwidow.jpg",
-        "Black Panther" to "https://example.com/blackpanther.jpg",
-        "Doctor Strange" to "https://example.com/doctorstrange.jpg",
-        "Scarlet Witch" to "https://example.com/scarletwitch.jpg"
-    )
-
-    Column {
-        CustomSearchBar(
-            query,
-            onQueryChange = { query = it },
-            placeholder = "Search for heroes",
-            onSearch = { /* Handle search */ }
-        )
-        HeroesList(marvelCards.filter { it.first.contains(query, true) })
+    when {
+        loading -> Loader()
+        showRetry -> Retry(onClick = { viewModel.retryLoadingHeroes() })
+        else -> Column {
+            CustomSearchBar(
+                searchQuery,
+                onQueryChange = { viewModel.onSearchQueryChanged(it) },
+                placeholder = "Search for heroes",
+                onSearch = { /* Handle search */ }
+            )
+            HeroesList(heroes.filter { it.name.contains(searchQuery, true) })
+        }
     }
+
+
 }
 
 @Composable
-fun HeroesList(heroes: List<Pair<String, String>>) {
+fun HeroesList(heroes: List<Hero>) {
 
-    val itemsPerRow = 2 // Define how many items you want per row
+    if (heroes.isEmpty()) {
+        return Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = stringResource(id = R.string.no_content_on_query_message))
+        }
+    }
 
-    // Group the cards into rows
-    val rows = heroes.chunked(itemsPerRow)
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(1),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(
+            vertical = 8.dp,
+        )
     ) {
-        items(rows) { rowItems ->
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(rowItems) { card ->
-                    MarvelCard(title = card.first, url = card.second)
-                }
-            }
+        items(heroes.size) { index ->
+            val hero = heroes[index]
+            MarvelCard(hero)
         }
     }
 }
