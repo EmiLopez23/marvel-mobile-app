@@ -34,7 +34,7 @@ class ApiServiceImpl @Inject constructor() {
             context.getString(R.string.api_key),
             context.getString(R.string.hash),
             context.getString(R.string.ts),
-            10
+            20
         )
 
         call.enqueue(object : Callback<ApiResponse<Hero>> {
