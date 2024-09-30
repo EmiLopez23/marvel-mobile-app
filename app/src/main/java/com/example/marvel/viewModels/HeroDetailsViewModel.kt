@@ -49,6 +49,7 @@ class HeroDetailViewModel @Inject constructor(
     }
 
     fun retryLoadingHeroes() {
+        _loading.value = true
         loadHeroDetails(_heroId.value)
     }
 }

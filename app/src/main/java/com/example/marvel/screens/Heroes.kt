@@ -22,12 +22,15 @@ import com.example.marvel.ui.components.CustomSearchBar
 import com.example.marvel.ui.components.Loader
 import com.example.marvel.ui.components.MarvelCard
 import com.example.marvel.ui.components.Retry
+import com.example.marvel.utils.modifier.helpers.formatImageUrl
+import com.example.marvel.viewModels.FavoritesViewModel
 import com.example.marvel.viewModels.HeroViewModel
 
 @Composable
 fun Heroes(
     onNavigate: (String) -> Unit,
     viewModel: HeroViewModel = hiltViewModel(),
+    favoritesViewModel: FavoritesViewModel = hiltViewModel()
 ) {
     val heroes by viewModel.heroes.collectAsState()
     val loading by viewModel.loadingHeroes.collectAsState()
@@ -46,7 +49,14 @@ fun Heroes(
             )
             HeroesList(
                 heroes.filter { it.name.contains(searchQuery, true) },
-                onNavigateToHeroDetails = { onNavigate("${Routes.HeroDetails.name}/$it") }
+                onNavigateToHeroDetails = { onNavigate("${Routes.HeroDetails.name}/$it") },
+                onFavoriteClick = {
+                    favoritesViewModel.toggleFavorite(
+                        it.id,
+                        it.name,
+                        formatImageUrl(it.thumbnail.path, it.thumbnail.extension)
+                    )
+                }
             )
         }
     }
@@ -55,7 +65,11 @@ fun Heroes(
 }
 
 @Composable
-fun HeroesList(heroes: List<Hero>, onNavigateToHeroDetails: (Int) -> Unit) {
+fun HeroesList(
+    heroes: List<Hero>,
+    onNavigateToHeroDetails: (Int) -> Unit,
+    onFavoriteClick: (Hero) -> Unit
+) {
 
     if (heroes.isEmpty()) {
         return Column(
@@ -80,7 +94,9 @@ fun HeroesList(heroes: List<Hero>, onNavigateToHeroDetails: (Int) -> Unit) {
             val hero = heroes[index]
             MarvelCard(
                 hero,
-                onClick = { onNavigateToHeroDetails(hero.id) }
+                onClick = { onNavigateToHeroDetails(hero.id) },
+                onFavoriteClick = { onFavoriteClick(hero) },
+                isFavorite = hero.isFavorite
             )
         }
     }

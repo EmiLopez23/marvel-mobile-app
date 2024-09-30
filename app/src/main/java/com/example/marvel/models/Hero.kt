@@ -5,12 +5,11 @@ data class Hero(
     val name: String,
     val description: String,
     val thumbnail: Thumbnail,
-    val resourceURI: String,
+    val isFavorite: Boolean = false,
     val comics: CollectionResponse,
     val series: CollectionResponse,
     val stories: CollectionResponse,
     val events: CollectionResponse,
-    val urls: List<Url>
 )
 
 data class CollectionResponse(
@@ -22,11 +21,6 @@ data class CollectionResponse(
 data class CollectionItem(
     val resourceURI: String,
     val name: String
-)
-
-data class Url(
-    val type: String,
-    val url: String
 )
 
 data class Thumbnail(
@@ -42,7 +36,6 @@ val initialHero = Hero(
         path = "",
         extension = "jpg"
     ),
-    resourceURI = "",
     comics = CollectionResponse(
         available = 0,
         collectionURI = "",
@@ -63,5 +56,4 @@ val initialHero = Hero(
         collectionURI = "",
         items = emptyList()
     ),
-    urls = emptyList()
 )
