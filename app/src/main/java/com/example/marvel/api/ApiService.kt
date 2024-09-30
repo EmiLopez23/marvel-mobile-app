@@ -1,6 +1,7 @@
 package com.example.marvel.api
 
 import com.example.marvel.models.ApiResponse
+import com.example.marvel.models.Comic
 import com.example.marvel.models.Hero
 import retrofit.Call
 import retrofit.http.GET
@@ -25,4 +26,13 @@ interface ApiService {
         @Query("hash") hash: String,
         @Query("ts") ts: String
     ): Call<ApiResponse<Hero>>
+
+
+    @GET("comics")
+    fun getComics(
+        @Query("apikey") apiKey: String,
+        @Query("hash") hash: String,
+        @Query("ts") ts: String,
+        @Query("limit") limit: Int
+    ): Call<ApiResponse<Comic>>
 }

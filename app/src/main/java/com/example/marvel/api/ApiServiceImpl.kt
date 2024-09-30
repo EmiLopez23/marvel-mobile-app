@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import com.example.marvel.R
 import com.example.marvel.models.ApiResponse
+import com.example.marvel.models.Comic
 import com.example.marvel.models.Hero
 import retrofit.Call
 import retrofit.Callback
@@ -112,4 +113,53 @@ class ApiServiceImpl @Inject constructor() {
         }
         )
     }
+
+    fun getComics(
+        context: Context,
+        onSuccess: (List<Comic>) -> Unit,
+        onFail: () -> Unit,
+        loadingFinished: () -> Unit
+    ) {
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(
+                context.getString(R.string.api_url)
+            )
+            .addConverterFactory(
+                GsonConverterFactory.create()
+            )
+            .build()
+
+        val service: ApiService = retrofit.create(ApiService::class.java)
+
+        val call: Call<ApiResponse<Comic>> = service.getComics(
+            context.getString(R.string.api_key),
+            context.getString(R.string.hash),
+            context.getString(R.string.ts),
+            20
+        )
+
+        call.enqueue(object : Callback<ApiResponse<Comic>> {
+            override fun onResponse(response: Response<ApiResponse<Comic>>, retrofit: Retrofit?) {
+                loadingFinished()
+                if (response.isSuccess) {
+                    val comics: List<Comic> = response.body().data.results
+                    onSuccess(comics)
+                } else {
+                    onFailure(Exception("Bad request"))
+                }
+            }
+
+            override fun onFailure(t: Throwable?) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.error_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                onFail()
+                loadingFinished()
+            }
+        }
+        )
+    }
+
 }
