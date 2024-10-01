@@ -1,5 +1,6 @@
 package com.example.marvel.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.marvel.R
+import com.example.marvel.ui.theme.MarvelRed
 
 @Composable
 fun Retry(
@@ -26,7 +28,10 @@ fun Retry(
             text = stringResource(id = R.string.retry_message),
             fontWeight = FontWeight.Bold
         )
-        Button(onClick = onClick) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier.background(color = MarvelRed)
+        ) {
             Text(text = stringResource(id = R.string.retry_btn_text))
         }
     }

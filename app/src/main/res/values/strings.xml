@@ -5,5 +5,5 @@
     <string name="no_content_on_query_message">No matches found</string>
     <string name="error_message">Error while retrieving data</string>
     <string name="retry_message">Check your connection and retry</string>
-    <string name="retry_btn_text">Check your connection and retry</string>
+    <string name="retry_btn_text">Retry</string>
 </resources>
