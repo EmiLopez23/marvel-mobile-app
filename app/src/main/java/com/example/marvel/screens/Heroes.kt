@@ -44,7 +44,7 @@ fun Heroes(
             CustomSearchBar(
                 searchQuery,
                 onQueryChange = { viewModel.onSearchQueryChanged(it) },
-                placeholder = "Search for heroes",
+                placeholder = stringResource(id = R.string.search_bar_placeholder),
                 onSearch = { /* Handle search */ }
             )
             HeroesList(

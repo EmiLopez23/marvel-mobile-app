@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">marvel</string>
     <string name="favorites_title">Favorites</string>
+    <string name="search_bar_placeholder">Search for heroes</string>
 
     <string name="no_content_on_query_message">No matches found</string>
     <string name="error_message">Error while retrieving data</string>
