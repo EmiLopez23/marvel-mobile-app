@@ -1,0 +1,10 @@
+<resources>
+    <string name="favorites_title">Favoritos</string>
+    <string name="search_bar_placeholder">Busca héroes</string>
+    <string name="comic_search_bar_placeholder">Busca comics</string>
+
+    <string name="no_content_on_query_message">No se encontraron coincidencias</string>
+    <string name="error_message">Error al recuperar datos</string>
+    <string name="retry_message">Comprueba tu conexión y vuelve a intentarlo.</string>
+    <string name="retry_btn_text">Volver a intentar</string>
+</resources>
