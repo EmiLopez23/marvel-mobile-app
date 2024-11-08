@@ -3,7 +3,6 @@ package com.example.marvel.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.marvel.R
 import com.example.marvel.ui.theme.MarvelRed
 
 @Composable
@@ -31,26 +31,34 @@ fun ComicCard(
     onFavoriteClick: () -> Unit,
     isFavorite: Boolean = false
 ) {
+    val image = if (thumbnail.contains("image_not_available")) {
+        R.drawable.placeholder
+    } else {
+        thumbnail
+    }
+
     Box {
-        Column{
-        AsyncImage(
-            model = thumbnail,
-            contentDescription = "$title thumbnail",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-        )
-        Text(
-            text = title,
-            color = Color.White,
-            fontSize = 20.sp,
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-        )
+        Column {
+            AsyncImage(
+                model = image,
+                contentDescription = "$title thumbnail",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+            )
+            Text(
+                text = title,
+                color = Color.White,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+            )
         }
         Box(
-            Modifier.align(Alignment.TopEnd).padding(5.dp)
+            Modifier
+                .align(Alignment.TopEnd)
+                .padding(5.dp)
         ) {
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
