@@ -26,6 +26,9 @@ class ComicsViewModel @Inject constructor(
     private val _showRetry = MutableStateFlow(false)
     val showRetry: StateFlow<Boolean> = _showRetry.asStateFlow()
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
     init {
         loadComics()
     }
@@ -49,5 +52,9 @@ class ComicsViewModel @Inject constructor(
     fun retryLoadingHeroes() {
         _loading.value = true
         loadComics()
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
     }
 }
