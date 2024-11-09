@@ -3,6 +3,7 @@ package com.example.marvel.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -13,9 +14,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.marvel.R
+import com.example.marvel.data.FavoriteType
 import com.example.marvel.models.Hero
 import com.example.marvel.navigation.enums.Routes
 import com.example.marvel.ui.components.CustomSearchBar
@@ -41,6 +45,14 @@ fun Heroes(
         loading -> Loader()
         showRetry -> Retry(onClick = { viewModel.retryLoadingHeroes() })
         else -> Column {
+            Text(
+                text = stringResource(id = R.string.heroes_title),
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+            )
             CustomSearchBar(
                 searchQuery,
                 onQueryChange = { viewModel.onSearchQueryChanged(it) },
@@ -54,7 +66,8 @@ fun Heroes(
                     favoritesViewModel.toggleFavorite(
                         it.id,
                         it.name,
-                        formatImageUrl(it.thumbnail.path, it.thumbnail.extension)
+                        formatImageUrl(it.thumbnail.path, it.thumbnail.extension),
+                        FavoriteType.HERO
                     )
                 }
             )

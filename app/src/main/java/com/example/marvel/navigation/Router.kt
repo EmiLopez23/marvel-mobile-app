@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.marvel.navigation.enums.Routes
+import com.example.marvel.screens.ComicDetail
 import com.example.marvel.screens.Comics
 import com.example.marvel.screens.Favorites
 import com.example.marvel.screens.HeroDetail
@@ -32,7 +33,9 @@ fun Router(innerPadding: PaddingValues, navController: NavHostController) {
             )
         }
         composable(route = Routes.Comics.name) {
-            Comics()
+            Comics(
+                onNavigate = { route -> navController.navigate(route) }
+            )
         }
         composable(route = Routes.Favorites.name) {
             Favorites(
@@ -43,5 +46,10 @@ fun Router(innerPadding: PaddingValues, navController: NavHostController) {
             val heroId = backStackEntry.arguments?.getString("heroId") ?: ""
             HeroDetail(heroId)
         }
+        composable(route = "${Routes.ComicDetail.name}/{heroId}") { backStackEntry ->
+            val comicId = backStackEntry.arguments?.getString("heroId") ?: ""
+            ComicDetail(comicId)
+        }
+
     }
 }

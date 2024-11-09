@@ -3,6 +3,8 @@
     <string name="favorites_title">Favorites</string>
     <string name="search_bar_placeholder">Search for heroes</string>
     <string name="comic_search_bar_placeholder">Search for comic</string>
+    <string name="heroes_title" translatable="false">Heroes</string>
+    <string name="comics_title" translatable="false">Comics</string>
 
     <string name="no_content_on_query_message">No matches found</string>
     <string name="error_message">Error while retrieving data</string>

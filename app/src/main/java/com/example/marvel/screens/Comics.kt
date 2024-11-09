@@ -3,6 +3,7 @@ package com.example.marvel.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -13,21 +14,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.marvel.R
+import com.example.marvel.data.FavoriteType
 import com.example.marvel.models.Comic
-import com.example.marvel.models.Hero
+import com.example.marvel.navigation.enums.Routes
 import com.example.marvel.ui.components.ComicCard
 import com.example.marvel.ui.components.CustomSearchBar
 import com.example.marvel.ui.components.Loader
 import com.example.marvel.ui.components.Retry
 import com.example.marvel.utils.modifier.helpers.formatImageUrl
 import com.example.marvel.viewModels.ComicsViewModel
+import com.example.marvel.viewModels.FavoritesViewModel
 
 @Composable
 fun Comics(
+    onNavigate: (String) -> Unit,
     viewModel: ComicsViewModel = hiltViewModel(),
+    favoritesViewModel: FavoritesViewModel = hiltViewModel()
 ) {
     val comics by viewModel.comics.collectAsState()
     val loading by viewModel.loadingComics.collectAsState()
@@ -39,6 +46,14 @@ fun Comics(
         loading -> Loader()
         showRetry -> Retry(onClick = { viewModel.retryLoadingHeroes() })
         else -> Column {
+            Text(
+                text = stringResource(id = R.string.comics_title),
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+            )
             CustomSearchBar(
                 searchQuery,
                 onQueryChange = { viewModel.onSearchQueryChanged(it) },
@@ -47,8 +62,15 @@ fun Comics(
             )
             ComicList(
                 comics.filter { it.title.contains(searchQuery, true) },
-                onNavigateToComicDetails = { },
-                onFavoriteClick = {}
+                onNavigateToComicDetails = { onNavigate("${Routes.ComicDetail.name}/$it") },
+                onFavoriteClick = {
+                    favoritesViewModel.toggleFavorite(
+                        it.id,
+                        it.title,
+                        formatImageUrl(it.thumbnail.path, it.thumbnail.extension),
+                        FavoriteType.COMIC
+                    )
+                }
             )
         }
 
@@ -62,7 +84,7 @@ fun Comics(
 fun ComicList(
     comics: List<Comic>,
     onNavigateToComicDetails: (Int) -> Unit,
-    onFavoriteClick: (Hero) -> Unit
+    onFavoriteClick: (Comic) -> Unit
 ) {
 
     if (comics.isEmpty()) {
@@ -89,8 +111,9 @@ fun ComicList(
             ComicCard(
                 title = comic.title,
                 thumbnail = formatImageUrl(comic.thumbnail.path, comic.thumbnail.extension),
-                isFavorite = true,
-                onFavoriteClick = {}
+                isFavorite = comic.isFavorite,
+                onClick = { onNavigateToComicDetails(comic.id) },
+                onFavoriteClick = { onFavoriteClick(comic) }
             )
         }
     }

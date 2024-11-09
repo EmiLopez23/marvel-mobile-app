@@ -27,6 +27,14 @@ interface ApiService {
         @Query("ts") ts: String
     ): Call<ApiResponse<Hero>>
 
+    @GET("characters/{id}/comics")
+    fun getHeroComicsById(
+        @Path("id") id: String,
+        @Query("apikey") apiKey: String,
+        @Query("hash") hash: String,
+        @Query("ts") ts: String
+    ): Call<ApiResponse<List<Comic>>>
+
 
     @GET("comics")
     fun getComics(
@@ -34,5 +42,13 @@ interface ApiService {
         @Query("hash") hash: String,
         @Query("ts") ts: String,
         @Query("limit") limit: Int
+    ): Call<ApiResponse<Comic>>
+
+    @GET("comics/{id}")
+    fun getComicById(
+        @Path("id") id: String,
+        @Query("apikey") apiKey: String,
+        @Query("hash") hash: String,
+        @Query("ts") ts: String
     ): Call<ApiResponse<Comic>>
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.example.marvel.api.ApiServiceImpl
-import com.example.marvel.data.FavoriteCharactersDatabase
+import com.example.marvel.data.FavoritesDatabase
 import com.example.marvel.models.Hero
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -34,7 +34,7 @@ class HeroViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    private val _database = FavoriteCharactersDatabase.getDatabase(context)
+    private val _database = FavoritesDatabase.getDatabase(context)
     private val favorites = _database.favoritesDao().getFavoriteHeroes().asFlow()
 
     private val favoriteHeroes = MutableStateFlow<Set<Int>>(emptySet())

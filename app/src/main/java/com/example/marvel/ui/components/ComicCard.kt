@@ -28,6 +28,7 @@ import com.example.marvel.ui.theme.MarvelRed
 fun ComicCard(
     title: String,
     thumbnail: String,
+    onClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     isFavorite: Boolean = false
 ) {
@@ -37,7 +38,10 @@ fun ComicCard(
         thumbnail
     }
 
-    Box {
+    Box(
+        Modifier
+            .clickable(onClick = onClick)
+    ) {
         Column {
             AsyncImage(
                 model = image,
@@ -79,6 +83,7 @@ fun ComicCardPreview() {
         title = "Comic Title",
         thumbnail = "https://cdn.marvel.com/u/prod/marvel/i/mg/c/d0/66a3ee84e6e1e/portrait_uncanny.jpg",
         isFavorite = true,
+        onClick = {},
         onFavoriteClick = {}
     )
 }

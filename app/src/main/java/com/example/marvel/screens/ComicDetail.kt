@@ -21,26 +21,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.marvel.models.Hero
+import com.example.marvel.R
+import com.example.marvel.models.Comic
 import com.example.marvel.ui.components.Loader
 import com.example.marvel.ui.components.Retry
 import com.example.marvel.ui.theme.MarvelRed
 import com.example.marvel.utils.modifier.helpers.formatImageUrl
 import com.example.marvel.utils.modifier.topBorder
-import com.example.marvel.viewModels.HeroDetailViewModel
+import com.example.marvel.viewModels.ComicDetailViewModel
 
 @Composable
-fun HeroDetail(
-    heroId: String,
-    viewModel: HeroDetailViewModel = hiltViewModel(),
+fun ComicDetail(
+    comicId: String,
+    viewModel: ComicDetailViewModel = hiltViewModel(),
 ) {
-
-    val hero by viewModel.hero.collectAsState()
+    val comic by viewModel.comic.collectAsState()
     val loading by viewModel.loadingHero.collectAsState()
     val showRetry by viewModel.showRetry.collectAsState()
 
-    LaunchedEffect(heroId) {
-        viewModel.loadHeroDetails(heroId)
+    LaunchedEffect(comicId) {
+        viewModel.loadComicDetails(comicId)
     }
 
     when {
@@ -49,28 +49,32 @@ fun HeroDetail(
         }
 
         showRetry -> {
-            Retry(onClick = { viewModel.loadHeroDetails(heroId) })
+            Retry(onClick = { viewModel.loadComicDetails(comicId) })
         }
 
         else -> {
-            HeroDetailContent(hero)
+            ComicDetailContent(comic)
         }
     }
-
 
 }
 
 
 @Composable
-fun HeroDetailContent(hero: Hero) {
+fun ComicDetailContent(comic: Comic) {
+    val image = if (comic.thumbnail.path.contains("image_not_available")) {
+        R.drawable.placeholder
+    } else {
+        formatImageUrl(comic.thumbnail.path, comic.thumbnail.extension)
+    }
     Column(
         Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
         AsyncImage(
-            model = formatImageUrl(hero.thumbnail.path, hero.thumbnail.extension),
-            contentDescription = hero.name + " thumbnail",
+            model = image,
+            contentDescription = comic.title + " thumbnail",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
@@ -83,7 +87,7 @@ fun HeroDetailContent(hero: Hero) {
                 .topBorder(2.dp, MarvelRed),
         ) {
             Text(
-                text = hero.name,
+                text = comic.title,
                 fontSize = 24.sp,
                 color = Color.White,
                 textAlign = TextAlign.Left,

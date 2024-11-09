@@ -7,16 +7,20 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface FavoriteCharacterDao {
+interface FavoritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToFavorites(favoriteHero: FavoriteCharacter)
+    suspend fun addToFavorites(favorite: Favorite)
 
-    @Query("SELECT * FROM favorite_characters")
-    fun getFavoriteHeroes(): LiveData<List<FavoriteCharacter>>
+    @Query("SELECT * FROM favorites WHERE type = :type")
+    fun getFavoriteHeroes(type: FavoriteType = FavoriteType.HERO): LiveData<List<Favorite>>
 
-    @Query("DELETE FROM favorite_characters WHERE id = :heroId")
-    suspend fun deleteFromFavoritesById(heroId: Int)
 
-    @Query("SELECT COUNT(*) > 0 FROM favorite_characters WHERE id = :heroId")
-    suspend fun isFavorite(heroId: Int): Boolean
+    @Query("SELECT * FROM favorites WHERE type = :type")
+    fun getFavoriteComics(type: FavoriteType = FavoriteType.COMIC): LiveData<List<Favorite>>
+
+    @Query("DELETE FROM favorites WHERE id = :id")
+    suspend fun deleteFromFavoritesById(id: Int)
+
+    @Query("SELECT COUNT(*) > 0 FROM favorites WHERE id = :id")
+    suspend fun isFavorite(id: Int): Boolean
 }

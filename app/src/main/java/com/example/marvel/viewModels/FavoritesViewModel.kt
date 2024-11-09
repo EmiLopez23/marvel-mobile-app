@@ -4,8 +4,9 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import com.example.marvel.data.FavoriteCharacter
-import com.example.marvel.data.FavoriteCharactersDatabase
+import com.example.marvel.data.Favorite
+import com.example.marvel.data.FavoriteType
+import com.example.marvel.data.FavoritesDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -16,31 +17,32 @@ class FavoritesViewModel @Inject constructor(
     @ApplicationContext val context: Context,
 ) : ViewModel() {
 
-    private val _database = FavoriteCharactersDatabase.getDatabase(context)
+    private val _database = FavoritesDatabase.getDatabase(context)
     private val favoritesDao = _database.favoritesDao()
 
 
     val heroes = favoritesDao.getFavoriteHeroes().asFlow()
+    val comics = favoritesDao.getFavoriteComics().asFlow()
 
-    fun toggleFavorite(id: Int, name: String, thumbnail: String) {
+    fun toggleFavorite(id: Int, name: String, thumbnail: String, type: FavoriteType) {
         viewModelScope.launch {
             if (favoritesDao.isFavorite(id)) {
                 deleteFavorites(id)
             } else {
-                insertFavorite(FavoriteCharacter(id, name, thumbnail))
+                insertFavorite(Favorite(id, name, thumbnail, type))
             }
         }
     }
 
-    fun deleteFavorites(heroId: Int) {
+    fun deleteFavorites(id: Int) {
         viewModelScope.launch {
-            favoritesDao.deleteFromFavoritesById(heroId)
+            favoritesDao.deleteFromFavoritesById(id)
         }
     }
 
-    fun insertFavorite(hero: FavoriteCharacter) {
+    fun insertFavorite(favorite: Favorite) {
         viewModelScope.launch {
-            favoritesDao.addToFavorites(hero)
+            favoritesDao.addToFavorites(favorite)
         }
     }
 }

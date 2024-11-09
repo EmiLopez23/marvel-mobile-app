@@ -4,5 +4,6 @@ enum class Routes {
     Heroes,
     HeroDetails,
     Comics,
+    ComicDetail,
     Favorites
 }

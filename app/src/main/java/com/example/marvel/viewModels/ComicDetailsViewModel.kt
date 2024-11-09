@@ -4,8 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.marvel.api.ApiServiceImpl
 import com.example.marvel.models.Comic
-import com.example.marvel.models.Hero
-import com.example.marvel.models.initialHero
+import com.example.marvel.models.initialComic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,8 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+
 @HiltViewModel
-class HeroDetailViewModel @Inject constructor(
+class ComicDetailViewModel @Inject constructor(
     @ApplicationContext val context: Context,
     private val service: ApiServiceImpl,
 ) : ViewModel() {
@@ -23,24 +23,21 @@ class HeroDetailViewModel @Inject constructor(
     val loadingHero: StateFlow<Boolean> = _loading.asStateFlow()
 
     //In case user needs to retry
-    private val _heroId = MutableStateFlow("1")
+    private val _comicId = MutableStateFlow("1")
 
-    private val _hero = MutableStateFlow(initialHero)
-    val hero: StateFlow<Hero> = _hero.asStateFlow()
-
-    private val _heroComics = MutableStateFlow(listOf<Comic>())
-    val heroComics: StateFlow<List<Comic>> = _heroComics.asStateFlow()
+    private val _comic = MutableStateFlow(initialComic)
+    val comic: StateFlow<Comic> = _comic.asStateFlow()
 
     private val _showRetry = MutableStateFlow(false)
     val showRetry: StateFlow<Boolean> = _showRetry.asStateFlow()
 
-    fun loadHeroDetails(heroId: String) {
-        _heroId.value = heroId
-        service.getHeroById(
-            heroId = heroId,
+    fun loadComicDetails(comicId: String) {
+        _comicId.value = comicId
+        service.getComicById(
+            comicId = comicId,
             context = context,
             onSuccess = {
-                _hero.value = it
+                _comic.value = it
                 _showRetry.value = false
             },
             onFail = {
@@ -54,6 +51,6 @@ class HeroDetailViewModel @Inject constructor(
 
     fun retryLoadingHeroes() {
         _loading.value = true
-        loadHeroDetails(_heroId.value)
+        loadComicDetails(_comicId.value)
     }
 }
