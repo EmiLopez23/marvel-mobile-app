@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -126,7 +127,7 @@ fun Selector(
             OutlinedButton(
                 onClick = { onOptionSelected(buttonText) },
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = Color.White,
+                    contentColor = if (selectedOption == buttonText) Color.White else MaterialTheme.colorScheme.tertiary,
                     containerColor = if (selectedOption == buttonText) Color.Red else Color.Unspecified
 
                 ),

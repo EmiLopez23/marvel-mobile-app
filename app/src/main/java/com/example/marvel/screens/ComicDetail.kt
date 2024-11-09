@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,7 +71,7 @@ fun ComicDetailContent(comic: Comic) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         AsyncImage(
             model = image,
@@ -84,13 +84,13 @@ fun ComicDetailContent(comic: Comic) {
         Column(
             Modifier
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(MaterialTheme.colorScheme.background)
                 .topBorder(2.dp, MarvelRed),
         ) {
             Text(
                 text = comic.title,
                 fontSize = 24.sp,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Left,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -103,7 +103,7 @@ fun ComicDetailContent(comic: Comic) {
                     id = R.string.no_description
                 ),
                 fontSize = 20.sp,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Left,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
