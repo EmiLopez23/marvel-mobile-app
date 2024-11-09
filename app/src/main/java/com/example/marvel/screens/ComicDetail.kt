@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -89,6 +90,19 @@ fun ComicDetailContent(comic: Comic) {
             Text(
                 text = comic.title,
                 fontSize = 24.sp,
+                color = Color.White,
+                textAlign = TextAlign.Left,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start)
+                    .padding(16.dp)
+            )
+            Text(
+                text = if (comic.description != null && comic.description != "") comic.description else stringResource(
+                    id = R.string.no_description
+                ),
+                fontSize = 20.sp,
                 color = Color.White,
                 textAlign = TextAlign.Left,
                 fontWeight = FontWeight.Bold,

@@ -15,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.example.marvel.R
 import com.example.marvel.models.Hero
 import com.example.marvel.ui.components.Loader
 import com.example.marvel.ui.components.Retry
@@ -85,6 +87,17 @@ fun HeroDetailContent(hero: Hero) {
             Text(
                 text = hero.name,
                 fontSize = 24.sp,
+                color = Color.White,
+                textAlign = TextAlign.Left,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start)
+                    .padding(16.dp)
+            )
+            Text(
+                text = if (hero.description != "") hero.description else stringResource(id = R.string.no_description),
+                fontSize = 20.sp,
                 color = Color.White,
                 textAlign = TextAlign.Left,
                 fontWeight = FontWeight.Bold,
